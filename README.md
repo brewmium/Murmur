@@ -37,6 +37,10 @@ Dev loop: `make app CONFIG=debug` builds faster.
 Then hold **Right Option**, speak, release. The hotkey, Whisper model, Ollama model,
 and cleanup prompt are all configurable in Settings.
 
+If Ollama isn't running the first time cleanup would be used, Murmur asks once
+whether to stay in plain-dictation mode or set Ollama up — so it works out of the
+box as a pure speech-to-text tool with no local LLM required.
+
 ## How it works
 
 hold key → AVAudioEngine (16 kHz mono Float32) → WhisperKit → sanitize →

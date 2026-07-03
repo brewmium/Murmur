@@ -40,6 +40,11 @@ enum OllamaClient {
 		_ = try? await URLSession.shared.data(for: request)
 	}
 
+	/// Lightweight reachability probe used to decide the first-run cleanup prompt.
+	static func isReachable() async -> Bool {
+		(try? await listModels()) != nil
+	}
+
 	static func listModels() async throws -> [String] {
 		let url = Prefs.ollamaURL.appendingPathComponent("api/tags")
 		var request = URLRequest(url: url)

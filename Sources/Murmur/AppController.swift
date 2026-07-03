@@ -28,6 +28,40 @@ final class AppController {
 		if Prefs.cleanupEnabled {
 			Task { await OllamaClient.warmup() }
 		}
+		Task { await checkOllamaFirstRun() }
+	}
+
+	/// First launch after onboarding, exactly once: if cleanup is on but Ollama
+	/// isn't reachable, offer to switch to plain dictation or set Ollama up.
+	private func checkOllamaFirstRun() async {
+		guard Prefs.hasCompletedOnboarding,
+			  Prefs.cleanupEnabled,
+			  !Prefs.didAskAboutOllama else { return }
+		let reachable = await OllamaClient.isReachable()
+		guard !reachable else { return }
+		presentOllamaFirstRunPrompt()
+	}
+
+	private func presentOllamaFirstRunPrompt() {
+		Prefs.didAskAboutOllama = true
+		let alert = NSAlert()
+		alert.messageText = "Set up local cleanup?"
+		alert.informativeText = """
+		Murmur can polish your dictation with a local LLM through Ollama - dropping \
+		filler words like "um," fixing punctuation, and formatting lists. Ollama \
+		isn't running right now.
+
+		Murmur still works great without it: your speech is transcribed and inserted \
+		exactly as spoken. You can turn cleanup on any time in Settings.
+		"""
+		alert.addButton(withTitle: "Use Plain Dictation")
+		alert.addButton(withTitle: "Set Up Ollama…")
+		NSApp.activate(ignoringOtherApps: true)
+		if alert.runModal() == .alertFirstButtonReturn {
+			UserDefaults.standard.set(false, forKey: PrefKey.cleanupEnabled)
+		} else if let url = URL(string: "https://ollama.com/download") {
+			NSWorkspace.shared.open(url)
+		}
 	}
 
 	func startHotkeyIfPermitted() {

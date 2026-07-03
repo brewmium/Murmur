@@ -12,6 +12,7 @@ enum PrefKey {
 	static let appendSpace = "appendSpace"
 	static let hudEnabled = "hudEnabled"
 	static let hasCompletedOnboarding = "hasCompletedOnboarding"
+	static let didAskAboutOllama = "didAskAboutOllama"
 }
 
 enum Prefs {
@@ -90,5 +91,10 @@ enum Prefs {
 	static var hasCompletedOnboarding: Bool {
 		get { UserDefaults.standard.bool(forKey: PrefKey.hasCompletedOnboarding) }
 		set { UserDefaults.standard.set(newValue, forKey: PrefKey.hasCompletedOnboarding) }
+	}
+
+	static var didAskAboutOllama: Bool {
+		get { UserDefaults.standard.bool(forKey: PrefKey.didAskAboutOllama) }
+		set { UserDefaults.standard.set(newValue, forKey: PrefKey.didAskAboutOllama) }
 	}
 }
