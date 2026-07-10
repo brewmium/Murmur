@@ -7,10 +7,12 @@ final class AppController {
 
 	let dictation = DictationController()
 	private let hotkey = HotkeyManager()
+	private var statusItem: StatusItemController?
 	private var onboardingWindow: NSWindow?
 	private var settingsWindow: NSWindow?
 
 	func start() {
+		statusItem = StatusItemController()
 		hotkey.onKeyDown = {
 			Task { @MainActor in AppController.shared.dictation.pressBegan() }
 		}

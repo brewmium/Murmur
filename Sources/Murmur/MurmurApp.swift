@@ -3,14 +3,11 @@ import SwiftUI
 @main
 struct MurmurApp: App {
 	@NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
-	@ObservedObject private var state = AppState.shared
 
+	// The menu bar item is an AppKit NSStatusItem owned by AppController; this
+	// app hosts no windows of its own, so the scene is an empty Settings stub.
 	var body: some Scene {
-		MenuBarExtra {
-			MenuView()
-		} label: {
-			Image(systemName: state.menuSymbol)
-		}
+		Settings { EmptyView() }
 	}
 }
 
