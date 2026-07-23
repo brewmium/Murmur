@@ -1,6 +1,6 @@
 CONFIG ?= release
 
-.PHONY: build app run clean
+.PHONY: build app run deploy clean
 
 build:
 	swift build -c $(CONFIG)
@@ -10,6 +10,9 @@ app:
 
 run: app
 	open build/Murmur.app
+
+deploy:
+	./scripts/deploy-app.sh
 
 clean:
 	rm -rf .build build
